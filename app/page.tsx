@@ -52,6 +52,24 @@ const calculators = [
     href: "/discount-calculator",
     category: "Math",
   },
+  {
+    title: "Calorie Calculator",
+    description: "Estimate your daily calorie needs based on your body and activity level.",
+    href: "/calorie-calculator",
+    category: "Health",
+  },
+  {
+    title: "Inflation Calculator",
+    description: "Estimate the future value of money based on inflation.",
+    href: "/inflation-calculator",
+    category: "Finance",
+  },
+  {
+    title: "VAT Calculator",
+    description: "Calculate VAT amount and total price using a tax percentage.",
+    href: "/vat-calculator",
+    category: "Finance",
+  },
 ];
 
 export default function Home() {
