@@ -40,6 +40,18 @@ const calculators = [
     href: "/savings-calculator",
     category: "Finance",
   },
+  {
+    title: "Age Calculator",
+    description: "Calculate your age from your date of birth.",
+    href: "/age-calculator",
+    category: "Health",
+  },
+  {
+    title: "Discount Calculator",
+    description: "Calculate the final price after applying a discount.",
+    href: "/discount-calculator",
+    category: "Math",
+  },
 ];
 
 export default function Home() {
