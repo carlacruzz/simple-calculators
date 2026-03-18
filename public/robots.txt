@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://simple-calculators-vercel-nzfre6v1b-carlacruzzs-projects.vercel.app/sitemap.xml
+Sitemap: https://simple-calculators-beige.vercel.app/sitemap.xml
