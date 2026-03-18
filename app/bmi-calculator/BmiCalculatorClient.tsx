@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import CalculatorLayout from "@/components/CalculatorLayout";
+import ResultBox from "@/components/ResultBox";
 
 export default function BmiCalculatorClient() {
   const [weight, setWeight] = useState("70");
@@ -28,61 +30,68 @@ export default function BmiCalculatorClient() {
   }, [bmi]);
 
   return (
-    <main className="min-h-screen bg-white px-6 py-10 text-black">
-      <div className="mx-auto max-w-2xl">
-        <a href="/" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-          ← Back to home
-        </a>
-
-        <h1 className="mb-2 text-4xl font-bold">BMI Calculator</h1>
-        <p className="mb-8 text-gray-600">
-          Calculate your body mass index using your weight and height.
-        </p>
-
-        <div className="rounded-2xl border border-gray-200 p-6 shadow-sm">
-          <div className="mb-5">
-            <label className="mb-2 block text-sm font-medium">
-              Weight (kg)
-            </label>
-            <input
-              type="number"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium">
-              Height (cm)
-            </label>
-            <input
-              type="number"
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-            />
-          </div>
-
-          <div className="rounded-2xl bg-gray-50 p-5">
-            <p className="mb-2 text-sm text-gray-500">Your BMI</p>
-            <p className="text-3xl font-bold">
-              {bmi === null ? "Invalid input" : bmi.toFixed(2)}
-            </p>
-            {bmi !== null && (
-              <p className="mt-2 text-gray-700">Category: {category}</p>
-            )}
-          </div>
+    <CalculatorLayout
+      title="BMI Calculator"
+      description="Calculate your body mass index using your height and weight."
+    >
+      <div className="grid gap-5 md:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium">Weight (kg)</label>
+          <input
+            type="number"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3"
+          />
         </div>
 
-        <section className="mt-10">
-          <h2 className="mb-3 text-2xl font-semibold">How BMI works</h2>
-          <p className="text-gray-700">
-            BMI is calculated by dividing weight in kilograms by height in meters squared.
-            It is a simple screening tool often used to classify body weight ranges.
-          </p>
-        </section>
+        <div>
+          <label className="mb-2 block text-sm font-medium">Height (cm)</label>
+          <input
+            type="number"
+            value={height}
+            onChange={(e) => setHeight(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3"
+          />
+        </div>
       </div>
-    </main>
+
+      <ResultBox
+        label="Your BMI"
+        value={bmi === null ? "Invalid input" : bmi.toFixed(2)}
+        extra={bmi !== null ? `Category: ${category}` : undefined}
+      />
+
+      <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <h2 className="mb-3 text-xl font-semibold">How BMI works</h2>
+          <p className="text-sm leading-7 text-slate-600">
+            BMI is calculated by dividing your weight in kilograms by your
+            height in meters squared. It is commonly used as a general health
+            screening tool.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <h2 className="mb-3 text-xl font-semibold">Example</h2>
+          <p className="text-sm leading-7 text-slate-600">
+            A person who weighs 70 kg and is 170 cm tall has a BMI of around
+            24.22, which falls into the normal weight category.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-4 text-xl font-semibold">Related calculators</h2>
+        <div className="flex flex-wrap gap-3">
+          <a href="/age-calculator" className="rounded-xl bg-slate-100 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200">
+            Age Calculator
+          </a>
+          <a href="/calorie-calculator" className="rounded-xl bg-slate-100 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200">
+            Calorie Calculator
+          </a>
+        </div>
+      </div>
+    </CalculatorLayout>
   );
 }

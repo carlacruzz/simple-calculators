@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import CalculatorLayout from "@/components/CalculatorLayout";
+import ResultBox from "@/components/ResultBox";
 
 export default function CompoundInterestCalculatorClient() {
   const [principal, setPrincipal] = useState("1000");
@@ -19,70 +21,89 @@ export default function CompoundInterestCalculatorClient() {
     return p * Math.pow(1 + r / 100, y);
   }, [principal, rate, years]);
 
+  const invested = Number(principal);
+  const interestEarned = result !== null ? result - invested : null;
+
   return (
-    <main className="min-h-screen bg-white px-6 py-10 text-black">
-      <div className="mx-auto max-w-2xl">
-        <a href="/" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-          ← Back to home
-        </a>
-
-        <h1 className="mb-2 text-4xl font-bold">Compound Interest Calculator</h1>
-        <p className="mb-8 text-gray-600">
-          Estimate how much your money could grow over time with compound interest.
-        </p>
-
-        <div className="rounded-2xl border border-gray-200 p-6 shadow-sm">
-          <div className="mb-5">
-            <label className="mb-2 block text-sm font-medium">
-              Initial Amount ($)
-            </label>
-            <input
-              type="number"
-              value={principal}
-              onChange={(e) => setPrincipal(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-            />
-          </div>
-
-          <div className="mb-5">
-            <label className="mb-2 block text-sm font-medium">
-              Interest Rate (%)
-            </label>
-            <input
-              type="number"
-              value={rate}
-              onChange={(e) => setRate(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium">Years</label>
-            <input
-              type="number"
-              value={years}
-              onChange={(e) => setYears(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-            />
-          </div>
-
-          <div className="rounded-2xl bg-gray-50 p-5">
-            <p className="mb-2 text-sm text-gray-500">Estimated Final Amount</p>
-            <p className="text-3xl font-bold">
-              {result === null ? "Invalid input" : `$${result.toFixed(2)}`}
-            </p>
-          </div>
+    <CalculatorLayout
+      title="Compound Interest Calculator"
+      description="Estimate how much your investment could grow over time using compound interest."
+    >
+      <div className="grid gap-5 md:grid-cols-3">
+        <div>
+          <label className="mb-2 block text-sm font-medium">Initial amount ($)</label>
+          <input
+            type="number"
+            value={principal}
+            onChange={(e) => setPrincipal(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3"
+          />
         </div>
 
-        <section className="mt-10">
-          <h2 className="mb-3 text-2xl font-semibold">How it works</h2>
-          <p className="text-gray-700">
-            This calculator uses the standard compound interest formula:
-            money grows each year based on both the initial amount and the
-            interest accumulated from previous years.
-          </p>
-        </section>
+        <div>
+          <label className="mb-2 block text-sm font-medium">Annual interest rate (%)</label>
+          <input
+            type="number"
+            value={rate}
+            onChange={(e) => setRate(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium">Years</label>
+          <input
+            type="number"
+            value={years}
+            onChange={(e) => setYears(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3"
+          />
+        </div>
       </div>
-    </main>
+
+      <ResultBox
+        label="Estimated final amount"
+        value={result === null ? "Invalid input" : `$${result.toFixed(2)}`}
+        extra={
+          result !== null && interestEarned !== null
+            ? `Interest earned: $${interestEarned.toFixed(2)}`
+            : undefined
+        }
+      />
+
+      <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <h2 className="mb-3 text-xl font-semibold">How it works</h2>
+          <p className="text-sm leading-7 text-slate-600">
+            Compound interest means your money grows not only on your initial
+            investment, but also on the interest accumulated over time.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <h2 className="mb-3 text-xl font-semibold">Example</h2>
+          <p className="text-sm leading-7 text-slate-600">
+            If you invest $1,000 at 5% annual interest for 10 years, your final
+            balance would be higher than your original investment because each
+            year builds on the previous one.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-4 text-xl font-semibold">Related calculators</h2>
+        <div className="flex flex-wrap gap-3">
+          <a href="/loan-calculator" className="rounded-xl bg-slate-100 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200">
+            Loan Calculator
+          </a>
+          <a href="/savings-calculator" className="rounded-xl bg-slate-100 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200">
+            Savings Calculator
+          </a>
+          <a href="/percentage-calculator" className="rounded-xl bg-slate-100 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200">
+            Percentage Calculator
+          </a>
+        </div>
+      </div>
+    </CalculatorLayout>
   );
 }

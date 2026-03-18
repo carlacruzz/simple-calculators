@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Simple Calculators",
-  description: "Free online calculators for finance, health, and everyday math.",
-  verification: {
-    google: "pQ_alaltt7MuYxCHEVjGmCgPYBMMTV-kv3mZrSkRhBY",
-  },
+  description: "Free online calculators for finance, health, food, and everyday life.",
 };
 
 export default function RootLayout({
@@ -16,7 +15,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-slate-50 text-slate-900">
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
