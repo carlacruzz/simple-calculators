@@ -66,6 +66,19 @@ export default function InflationCalculatorClient() {
         label="Future value"
         value={futureCost === null ? "Enter values" : `$${futureCost.toFixed(2)}`}
       />
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
+        <p className="mb-4 text-sm leading-7 text-slate-600">
+          Read the full guide to understand how inflation changes the future value and purchasing power of money.
+        </p>
+        <a
+          href="/guides/inflation"
+          className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
+        >
+          Read the inflation guide
+        </a>
+      </div>
     </CalculatorLayout>
   );
 }

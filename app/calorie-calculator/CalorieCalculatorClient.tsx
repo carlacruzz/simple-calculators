@@ -108,6 +108,19 @@ export default function CalorieCalculatorClient() {
         label="Estimated daily calories"
         value={calories === null ? "Enter values" : `${calories.toFixed(0)} kcal/day`}
       />
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
+        <p className="mb-4 text-sm leading-7 text-slate-600">
+          Read the full guide to understand how daily calorie needs are estimated from body data and activity level.
+        </p>
+        <a
+          href="/guides/calorie"
+          className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
+        >
+          Read the calorie guide
+        </a>
+      </div>
     </CalculatorLayout>
   );
 }

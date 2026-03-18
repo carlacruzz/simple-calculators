@@ -32,11 +32,8 @@ export default function CompoundInterestCalculatorClient() {
       description="Estimate how much your investment could grow over time using compound interest."
     >
       <div className="grid gap-5 md:grid-cols-3">
-
         <div>
-          <label className="mb-2 block text-sm font-medium">
-            Initial amount ($)
-          </label>
+          <label className="mb-2 block text-sm font-medium">Initial amount ($)</label>
           <input
             type="number"
             placeholder="e.g. 1000"
@@ -47,9 +44,7 @@ export default function CompoundInterestCalculatorClient() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium">
-            Annual interest rate (%)
-          </label>
+          <label className="mb-2 block text-sm font-medium">Annual interest rate (%)</label>
           <input
             type="number"
             placeholder="e.g. 5"
@@ -60,9 +55,7 @@ export default function CompoundInterestCalculatorClient() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium">
-            Years
-          </label>
+          <label className="mb-2 block text-sm font-medium">Years</label>
           <input
             type="number"
             placeholder="e.g. 10"
@@ -71,7 +64,6 @@ export default function CompoundInterestCalculatorClient() {
             className="w-full rounded-xl border border-slate-300 px-4 py-3"
           />
         </div>
-
       </div>
 
       <ResultBox
@@ -83,6 +75,19 @@ export default function CompoundInterestCalculatorClient() {
             : undefined
         }
       />
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
+        <p className="mb-4 text-sm leading-7 text-slate-600">
+          Read the full guide to understand how compound interest works and why it matters for long-term investing.
+        </p>
+        <a
+          href="/guides/compound-interest"
+          className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
+        >
+          Read the compound interest guide
+        </a>
+      </div>
     </CalculatorLayout>
   );
 }

@@ -16,7 +16,7 @@ export default function RecipeServingsCalculatorClient() {
   const [desiredServings, setDesiredServings] = useState("");
 
   const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: 1, name: "", amount: "", unit: "" }
+    { id: 1, name: "", amount: "", unit: "" },
   ]);
 
   const multiplier = useMemo(() => {
@@ -33,14 +33,12 @@ export default function RecipeServingsCalculatorClient() {
   const addIngredient = () => {
     setIngredients((prev) => [
       ...prev,
-      { id: Date.now(), name: "", amount: "", unit: "" }
+      { id: Date.now(), name: "", amount: "", unit: "" },
     ]);
   };
 
   const removeIngredient = (id: number) => {
-    setIngredients((prev) =>
-      prev.filter((ingredient) => ingredient.id !== id)
-    );
+    setIngredients((prev) => prev.filter((ingredient) => ingredient.id !== id));
   };
 
   const updateIngredient = (
@@ -50,9 +48,7 @@ export default function RecipeServingsCalculatorClient() {
   ) => {
     setIngredients((prev) =>
       prev.map((ingredient) =>
-        ingredient.id === id
-          ? { ...ingredient, [field]: value }
-          : ingredient
+        ingredient.id === id ? { ...ingredient, [field]: value } : ingredient
       )
     );
   };
@@ -62,9 +58,7 @@ export default function RecipeServingsCalculatorClient() {
 
     return ingredients.map((ingredient) => {
       const amount = Number(ingredient.amount);
-      const scaledAmount = isNaN(amount)
-        ? null
-        : amount * multiplier;
+      const scaledAmount = isNaN(amount) ? null : amount * multiplier;
 
       return {
         ...ingredient,
@@ -79,11 +73,8 @@ export default function RecipeServingsCalculatorClient() {
       description="Scale ingredients automatically for more or fewer servings."
     >
       <div className="grid gap-5 md:grid-cols-2">
-
         <div>
-          <label className="mb-2 block text-sm font-medium">
-            Original servings
-          </label>
+          <label className="mb-2 block text-sm font-medium">Original servings</label>
           <input
             type="number"
             placeholder="e.g. 4"
@@ -94,9 +85,7 @@ export default function RecipeServingsCalculatorClient() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium">
-            Desired servings
-          </label>
+          <label className="mb-2 block text-sm font-medium">Desired servings</label>
           <input
             type="number"
             placeholder="e.g. 8"
@@ -105,7 +94,6 @@ export default function RecipeServingsCalculatorClient() {
             className="w-full rounded-xl border border-slate-300 px-4 py-3"
           />
         </div>
-
       </div>
 
       <ResultBox
@@ -114,12 +102,8 @@ export default function RecipeServingsCalculatorClient() {
       />
 
       <div className="mt-10">
-
         <div className="mb-4 flex justify-between items-center">
-
-          <h2 className="text-2xl font-bold">
-            Ingredients
-          </h2>
+          <h2 className="text-2xl font-bold">Ingredients</h2>
 
           <button
             onClick={addIngredient}
@@ -127,29 +111,20 @@ export default function RecipeServingsCalculatorClient() {
           >
             + Add ingredient
           </button>
-
         </div>
 
         <div className="space-y-4">
-
-          {ingredients.map((ingredient, index) => (
-
+          {ingredients.map((ingredient) => (
             <div
               key={ingredient.id}
               className="border border-slate-200 rounded-2xl p-5"
             >
-
               <div className="grid md:grid-cols-3 gap-4">
-
                 <input
                   placeholder="Ingredient name"
                   value={ingredient.name}
                   onChange={(e) =>
-                    updateIngredient(
-                      ingredient.id,
-                      "name",
-                      e.target.value
-                    )
+                    updateIngredient(ingredient.id, "name", e.target.value)
                   }
                   className="border border-slate-300 rounded-xl px-4 py-3"
                 />
@@ -159,11 +134,7 @@ export default function RecipeServingsCalculatorClient() {
                   placeholder="Amount"
                   value={ingredient.amount}
                   onChange={(e) =>
-                    updateIngredient(
-                      ingredient.id,
-                      "amount",
-                      e.target.value
-                    )
+                    updateIngredient(ingredient.id, "amount", e.target.value)
                   }
                   className="border border-slate-300 rounded-xl px-4 py-3"
                 />
@@ -172,15 +143,10 @@ export default function RecipeServingsCalculatorClient() {
                   placeholder="Unit"
                   value={ingredient.unit}
                   onChange={(e) =>
-                    updateIngredient(
-                      ingredient.id,
-                      "unit",
-                      e.target.value
-                    )
+                    updateIngredient(ingredient.id, "unit", e.target.value)
                   }
                   className="border border-slate-300 rounded-xl px-4 py-3"
                 />
-
               </div>
 
               {ingredients.length > 1 && (
@@ -191,39 +157,41 @@ export default function RecipeServingsCalculatorClient() {
                   Remove
                 </button>
               )}
-
             </div>
-
           ))}
-
         </div>
-
       </div>
 
       {multiplier && (
         <div className="mt-10 border border-slate-200 rounded-2xl p-6">
-          <h2 className="text-xl font-bold mb-4">
-            Adjusted ingredients
-          </h2>
+          <h2 className="text-xl font-bold mb-4">Adjusted ingredients</h2>
 
           <ul className="space-y-2">
-
             {scaledIngredients.map((ingredient) => (
-
               <li key={ingredient.id}>
                 {ingredient.name || "Ingredient"} :{" "}
-                {ingredient.scaledAmount
+                {ingredient.scaledAmount !== null
                   ? ingredient.scaledAmount.toFixed(2)
                   : "-"}{" "}
                 {ingredient.unit}
               </li>
-
             ))}
-
           </ul>
-
         </div>
       )}
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
+        <p className="mb-4 text-sm leading-7 text-slate-600">
+          Read the full guide to learn how recipe scaling works and how to adjust ingredient quantities correctly.
+        </p>
+        <a
+          href="/guides/recipe-scaling"
+          className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
+        >
+          Read the recipe scaling guide
+        </a>
+      </div>
     </CalculatorLayout>
   );
 }

@@ -56,6 +56,19 @@ export default function VatCalculatorClient() {
         value={results === null ? "Enter values" : `$${results.vatAmount.toFixed(2)}`}
         extra={results !== null ? `Total price: $${results.total.toFixed(2)}` : undefined}
       />
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
+        <p className="mb-4 text-sm leading-7 text-slate-600">
+          Read the full guide to understand how VAT is calculated and how to find the final price after tax.
+        </p>
+        <a
+          href="/guides/vat"
+          className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
+        >
+          Read the VAT guide
+        </a>
+      </div>
     </CalculatorLayout>
   );
 }

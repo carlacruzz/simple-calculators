@@ -74,6 +74,19 @@ export default function SavingsCalculatorClient() {
         label="Estimated savings"
         value={finalAmount === null ? "Enter values" : `$${finalAmount.toFixed(2)}`}
       />
+
+      <div className="mt-10 rounded-2xl border border-slate-200 p-5">
+        <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
+        <p className="mb-4 text-sm leading-7 text-slate-600">
+          Read the full guide to understand how regular savings can grow over time with interest.
+        </p>
+        <a
+          href="/guides/savings"
+          className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
+        >
+          Read the savings guide
+        </a>
+      </div>
     </CalculatorLayout>
   );
 }
