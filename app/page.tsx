@@ -72,18 +72,41 @@ const calculators = [
   },
 ];
 
+const categories = ["All", "Finance", "Health", "Food", "Math"];
+
 export default function Home() {
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOrder, setSortOrder] = useState("a-z");
 
   const filteredCalculators = useMemo(() => {
+    let result = [...calculators];
+
     const q = search.toLowerCase().trim();
 
-    if (!q) return calculators;
+    if (q) {
+      result = result.filter((calc) =>
+        [calc.title, calc.description, calc.category]
+          .join(" ")
+          .toLowerCase()
+          .includes(q)
+      );
+    }
 
-    return calculators.filter((calc) =>
-      [calc.title, calc.description, calc.category].join(" ").toLowerCase().includes(q)
-    );
-  }, [search]);
+    if (selectedCategory !== "All") {
+      result = result.filter((calc) => calc.category === selectedCategory);
+    }
+
+    if (sortOrder === "a-z") {
+      result.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    if (sortOrder === "z-a") {
+      result.sort((a, b) => b.title.localeCompare(a.title));
+    }
+
+    return result;
+  }, [search, selectedCategory, sortOrder]);
 
   return (
     <main>
@@ -127,14 +150,14 @@ export default function Home() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="text-sm font-semibold text-slate-500">Finance</p>
             <p className="mt-2 text-sm text-slate-600">
-              Loans, savings, mortgage, interest, and more.
+              Loans, savings, mortgage, interest, inflation, VAT, and more.
             </p>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="text-sm font-semibold text-slate-500">Health</p>
             <p className="mt-2 text-sm text-slate-600">
-              BMI, calories, macros, age, and body-related tools.
+              BMI, calories, age, and body-related tools.
             </p>
           </div>
 
@@ -146,9 +169,9 @@ export default function Home() {
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-sm font-semibold text-slate-500">Everyday Math</p>
+            <p className="text-sm font-semibold text-slate-500">Math</p>
             <p className="mt-2 text-sm text-slate-600">
-              Percentages, discounts, tips, and conversions.
+              Percentages, discounts, tax, and everyday calculations.
             </p>
           </div>
         </div>
@@ -159,17 +182,40 @@ export default function Home() {
           <div className="mb-6">
             <h2 className="text-2xl font-bold tracking-tight">Find a calculator</h2>
             <p className="mt-2 text-slate-600">
-              Search by name, topic, or category.
+              Search, filter, and sort all available tools.
             </p>
           </div>
 
-          <input
-            type="text"
-            placeholder="Search calculators..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none"
-          />
+          <div className="grid gap-4 md:grid-cols-3">
+            <input
+              type="text"
+              placeholder="Search calculators..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none"
+            />
+
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm bg-white outline-none"
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category === "All" ? "All categories" : category}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm bg-white outline-none"
+            >
+              <option value="a-z">Alphabetical: A to Z</option>
+              <option value="z-a">Alphabetical: Z to A</option>
+            </select>
+          </div>
         </div>
       </section>
 
@@ -210,10 +256,17 @@ export default function Home() {
       </section>
 
       <section id="calculators" className="mx-auto max-w-6xl px-6 py-10">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold tracking-tight">All calculators</h2>
-          <p className="mt-3 text-slate-600">
-            Browse all available tools.
+        <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight">All calculators</h2>
+            <p className="mt-3 text-slate-600">
+              Browse all available tools.
+            </p>
+          </div>
+
+          <p className="text-sm text-slate-500">
+            Showing {filteredCalculators.length} calculator
+            {filteredCalculators.length === 1 ? "" : "s"}
           </p>
         </div>
 
