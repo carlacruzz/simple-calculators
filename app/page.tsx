@@ -3,6 +3,33 @@
 import { useMemo, useState } from "react";
 import CalculatorCard from "@/components/CalculatorCard";
 
+const trendingCalculators = [
+  {
+    title: "Loan Calculator",
+    description: "Calculate monthly loan payments quickly.",
+    href: "/loan-calculator",
+    category: "Finance",
+  },
+  {
+    title: "BMI Calculator",
+    description: "Check your body mass index.",
+    href: "/bmi-calculator",
+    category: "Health",
+  },
+  {
+    title: "Recipe Servings Calculator",
+    description: "Scale ingredients for recipes.",
+    href: "/recipe-servings-calculator",
+    category: "Food",
+  },
+  {
+    title: "Compound Interest Calculator",
+    description: "Estimate investment growth.",
+    href: "/compound-interest-calculator",
+    category: "Finance",
+  },
+];
+
 const calculators = [
   {
     title: "Compound Interest Calculator",
@@ -122,9 +149,40 @@ export default function Home() {
         </p>
       </section>
 
+      {/* TRENDING CALCULATORS */}
+
+      <section className="mb-16">
+
+        <h2 className="mb-6 text-3xl font-bold tracking-tight">
+          Trending Calculators
+        </h2>
+
+        <p className="mb-8 text-slate-600">
+          The most popular tools used by visitors.
+        </p>
+
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+          {trendingCalculators.map((calc) => (
+
+            <CalculatorCard
+              key={calc.href}
+              title={calc.title}
+              description={calc.description}
+              href={calc.href}
+              category={calc.category}
+            />
+
+          ))}
+
+        </div>
+
+      </section>
+
       {/* SEARCH */}
 
       <section className="mb-10">
+
         <input
           type="text"
           placeholder="Search calculators..."
@@ -132,6 +190,7 @@ export default function Home() {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full rounded-2xl border border-slate-300 px-4 py-3"
         />
+
       </section>
 
       {/* CATEGORY FILTER */}
@@ -139,6 +198,7 @@ export default function Home() {
       <section className="mb-10 flex flex-wrap gap-3">
 
         {categories.map((c) => (
+
           <button
             key={c}
             onClick={() => setCategory(c)}
@@ -151,6 +211,7 @@ export default function Home() {
           >
             {c}
           </button>
+
         ))}
 
       </section>
@@ -181,11 +242,12 @@ export default function Home() {
         {filtered.length === 1 ? "" : "s"}
       </section>
 
-      {/* CALCULATOR GRID */}
+      {/* ALL CALCULATORS */}
 
       <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 
         {filtered.map((calc) => (
+
           <CalculatorCard
             key={calc.href}
             title={calc.title}
@@ -193,6 +255,7 @@ export default function Home() {
             href={calc.href}
             category={calc.category}
           />
+
         ))}
 
       </section>
