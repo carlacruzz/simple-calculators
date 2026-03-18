@@ -4,9 +4,6 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Simple Calculators",
   description: "Free online calculators for finance, health, and everyday math.",
-  verification: {
-    google: "pQ_alaltt7MuYxCHEVjGmCgPYBMMTV-kv3mZrSkRhBY",
-  },
 };
 
 export default function RootLayout({
@@ -16,6 +13,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="pQ_alaltt7MuYxCHEVjGmCgPYBMMTV-kv3mZrSkRhBY"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
