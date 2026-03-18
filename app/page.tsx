@@ -97,6 +97,30 @@ const calculators = [
     href: "/discount-calculator",
     category: "Math",
   },
+  {
+    title: "Mortgage Calculator",
+    description: "Estimate monthly mortgage payments.",
+    href: "/mortgage-calculator",
+    category: "Finance",
+  },
+  {
+    title: "Tip Calculator",
+    description: "Calculate tip amount and split the bill.",
+    href: "/tip-calculator",
+    category: "Math",
+  },
+  {
+    title: "Unit Converter",
+    description: "Convert between common length units.",
+    href: "/unit-converter",
+    category: "Math",
+  },
+  {
+    title: "BMR Calculator",
+    description: "Estimate your basal metabolic rate.",
+    href: "/bmr-calculator",
+    category: "Health",
+  },
 ];
 
 const categories = ["All", "Finance", "Health", "Food", "Math"];
