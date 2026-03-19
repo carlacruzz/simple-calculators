@@ -4,192 +4,188 @@ import { useMemo, useState } from "react";
 import CalculatorLayout from "@/components/CalculatorLayout";
 import ResultBox from "@/components/ResultBox";
 
-type Ingredient = {
-  id: number;
-  name: string;
-  amount: string;
-  unit: string;
-};
+export default function BmiCalculatorClient() {
+  const [sex, setSex] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [age, setAge] = useState("");
 
-export default function RecipeServingsCalculatorClient() {
-  const [originalServings, setOriginalServings] = useState("");
-  const [desiredServings, setDesiredServings] = useState("");
+  const bmi = useMemo(() => {
+    if (!height || !weight) return null;
 
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: 1, name: "", amount: "", unit: "" },
-  ]);
+    const h = Number(height);
+    const w = Number(weight);
 
-  const multiplier = useMemo(() => {
-    if (!originalServings || !desiredServings) return null;
+    if (isNaN(h) || isNaN(w) || h <= 0 || w <= 0) {
+      return null;
+    }
 
-    const original = Number(originalServings);
-    const desired = Number(desiredServings);
+    const heightInMeters = h / 100;
+    return w / (heightInMeters * heightInMeters);
+  }, [height, weight]);
 
-    if (!original || !desired || original <= 0 || desired <= 0) return null;
+  const category = useMemo(() => {
+    if (bmi === null) return null;
 
-    return desired / original;
-  }, [originalServings, desiredServings]);
+    if (bmi < 18.5) return "Underweight";
+    if (bmi < 25) return "Normal weight";
+    if (bmi < 30) return "Overweight";
+    return "Obesity";
+  }, [bmi]);
 
-  const addIngredient = () => {
-    setIngredients((prev) => [
-      ...prev,
-      { id: Date.now(), name: "", amount: "", unit: "" },
-    ]);
-  };
+  const estimatedBodyFat = useMemo(() => {
+    if (bmi === null || !age) return null;
 
-  const removeIngredient = (id: number) => {
-    setIngredients((prev) => prev.filter((ingredient) => ingredient.id !== id));
-  };
+    const a = Number(age);
+    if (isNaN(a) || a <= 0) return null;
 
-  const updateIngredient = (
-    id: number,
-    field: keyof Omit<Ingredient, "id">,
-    value: string
-  ) => {
-    setIngredients((prev) =>
-      prev.map((ingredient) =>
-        ingredient.id === id ? { ...ingredient, [field]: value } : ingredient
-      )
-    );
-  };
+    // Deurenberg estimate:
+    // Body fat % = 1.20 × BMI + 0.23 × age − 10.8 × sex − 5.4
+    // sex = 1 for male, 0 for female
+    // If "other / prefer not to say", we do not apply sex factor.
 
-  const scaledIngredients = useMemo(() => {
-    if (!multiplier) return [];
+    if (sex === "male") {
+      return 1.2 * bmi + 0.23 * a - 10.8 * 1 - 5.4;
+    }
 
-    return ingredients.map((ingredient) => {
-      const amount = Number(ingredient.amount);
-      const scaledAmount = isNaN(amount) ? null : amount * multiplier;
+    if (sex === "female") {
+      return 1.2 * bmi + 0.23 * a - 10.8 * 0 - 5.4;
+    }
 
-      return {
-        ...ingredient,
-        scaledAmount,
-      };
-    });
-  }, [ingredients, multiplier]);
+    return null;
+  }, [bmi, age, sex]);
 
   return (
     <CalculatorLayout
-      title="Recipe Servings Calculator"
-      description="Scale ingredients automatically for more or fewer servings."
+      title="BMI Calculator"
+      description="Calculate your body mass index (BMI) from height and weight. You can also add sex and age for an estimated body fat percentage."
     >
+      {/* INPUTS */}
       <div className="grid gap-5 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium">Original servings</label>
+          <label className="mb-2 block text-sm font-medium">
+            Height (cm)
+          </label>
           <input
             type="number"
-            placeholder="e.g. 4"
-            value={originalServings}
-            onChange={(e) => setOriginalServings(e.target.value)}
+            placeholder="e.g. 170"
+            value={height}
+            onChange={(e) => setHeight(e.target.value)}
             className="w-full rounded-xl border border-slate-300 px-4 py-3"
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium">Desired servings</label>
+          <label className="mb-2 block text-sm font-medium">
+            Weight (kg)
+          </label>
           <input
             type="number"
-            placeholder="e.g. 8"
-            value={desiredServings}
-            onChange={(e) => setDesiredServings(e.target.value)}
+            placeholder="e.g. 70"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Sex
+          </label>
+          <select
+            value={sex}
+            onChange={(e) => setSex(e.target.value)}
+            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3"
+          >
+            <option value="">Select option</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other / Prefer not to say</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Age
+          </label>
+          <input
+            type="number"
+            placeholder="e.g. 30"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
             className="w-full rounded-xl border border-slate-300 px-4 py-3"
           />
         </div>
       </div>
 
+      {/* BMI RESULT */}
       <ResultBox
-        label="Servings multiplier"
-        value={multiplier ? `${multiplier.toFixed(2)}x` : "Enter values"}
+        label="Your BMI"
+        value={bmi === null ? "Enter height and weight" : bmi.toFixed(1)}
+        extra={category ? `Category: ${category}` : undefined}
       />
 
-      <div className="mt-10">
-        <div className="mb-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Ingredients</h2>
+      {/* OPTIONAL BODY FAT RESULT */}
+      {(sex === "male" || sex === "female") && (
+        <ResultBox
+          label="Estimated body fat"
+          value={
+            estimatedBodyFat === null
+              ? "Enter age"
+              : `${estimatedBodyFat.toFixed(1)}%`
+          }
+          extra="This is only an estimate based on BMI, age, and sex."
+        />
+      )}
 
-          <button
-            onClick={addIngredient}
-            className="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white"
-          >
-            + Add ingredient
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {ingredients.map((ingredient) => (
-            <div
-              key={ingredient.id}
-              className="border border-slate-200 rounded-2xl p-5"
-            >
-              <div className="grid md:grid-cols-3 gap-4">
-                <input
-                  placeholder="Ingredient name"
-                  value={ingredient.name}
-                  onChange={(e) =>
-                    updateIngredient(ingredient.id, "name", e.target.value)
-                  }
-                  className="border border-slate-300 rounded-xl px-4 py-3"
-                />
-
-                <input
-                  type="number"
-                  placeholder="Amount"
-                  value={ingredient.amount}
-                  onChange={(e) =>
-                    updateIngredient(ingredient.id, "amount", e.target.value)
-                  }
-                  className="border border-slate-300 rounded-xl px-4 py-3"
-                />
-
-                <input
-                  placeholder="Unit"
-                  value={ingredient.unit}
-                  onChange={(e) =>
-                    updateIngredient(ingredient.id, "unit", e.target.value)
-                  }
-                  className="border border-slate-300 rounded-xl px-4 py-3"
-                />
-              </div>
-
-              {ingredients.length > 1 && (
-                <button
-                  onClick={() => removeIngredient(ingredient.id)}
-                  className="mt-4 text-sm text-red-600"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {multiplier && (
-        <div className="mt-10 border border-slate-200 rounded-2xl p-6">
-          <h2 className="text-xl font-bold mb-4">Adjusted ingredients</h2>
-
-          <ul className="space-y-2">
-            {scaledIngredients.map((ingredient) => (
-              <li key={ingredient.id}>
-                {ingredient.name || "Ingredient"} :{" "}
-                {ingredient.scaledAmount !== null
-                  ? ingredient.scaledAmount.toFixed(2)
-                  : "-"}{" "}
-                {ingredient.unit}
-              </li>
-            ))}
-          </ul>
+      {sex === "other" && (
+        <div className="mt-6 rounded-2xl border border-slate-200 p-5">
+          <p className="text-sm leading-7 text-slate-600">
+            BMI itself does not use sex in the formula. Since you selected
+            “Other / Prefer not to say”, no sex-based body fat estimate is applied.
+          </p>
         </div>
       )}
 
+      {/* INFO */}
+      {bmi && (
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 p-5">
+            <h2 className="mb-3 text-xl font-semibold">
+              BMI Categories
+            </h2>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li>Underweight: {"< 18.5"}</li>
+              <li>Normal weight: 18.5 – 24.9</li>
+              <li>Overweight: 25 – 29.9</li>
+              <li>Obesity: 30+</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 p-5">
+            <h2 className="mb-3 text-xl font-semibold">
+              Important note
+            </h2>
+            <p className="text-sm leading-7 text-slate-600">
+              BMI is a simple screening tool and does not directly measure body fat.
+              The BMI formula is the same for everyone, but the optional body fat
+              estimate can vary depending on sex and age.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* GUIDE */}
       <div className="mt-10 rounded-2xl border border-slate-200 p-5">
         <h2 className="mb-3 text-xl font-semibold">Learn more</h2>
         <p className="mb-4 text-sm leading-7 text-slate-600">
-          Read the full guide to learn how recipe scaling works and how to adjust ingredient quantities correctly.
+          Read the full guide to understand how BMI is calculated and how the categories are interpreted.
         </p>
         <a
-          href="/guides/recipe-scaling"
+          href="/guides/bmi"
           className="inline-flex rounded-lg bg-slate-900 px-4 py-3 text-sm text-white hover:bg-slate-700"
         >
-          Read the recipe scaling guide
+          Read the BMI guide
         </a>
       </div>
     </CalculatorLayout>
