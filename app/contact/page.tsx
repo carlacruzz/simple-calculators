@@ -4,7 +4,7 @@ export default function ContactPage() {
       <h1 className="mb-4 text-4xl font-bold">Contact</h1>
       <p className="text-lg leading-8 text-slate-600">
         For feedback, suggestions, or collaboration inquiries, you can contact
-        us at: your-email@example.com
+        us at: simplecalculators@outlook.com
       </p>
     </main>
   );
