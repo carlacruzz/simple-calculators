@@ -1,76 +1,9 @@
 import { notFound } from "next/navigation";
 import CalculatorCard from "@/components/CalculatorCard";
+import { calculators, type CalculatorItem } from "@/lib/calculators";
 
-const calculators = [
-  {
-    title: "Compound Interest Calculator",
-    description: "Estimate investment growth.",
-    href: "/compound-interest-calculator",
-    category: "Finance",
-  },
-  {
-    title: "Loan Calculator",
-    description: "Calculate monthly loan payments.",
-    href: "/loan-calculator",
-    category: "Finance",
-  },
-  {
-    title: "Savings Calculator",
-    description: "Estimate long-term savings.",
-    href: "/savings-calculator",
-    category: "Finance",
-  },
-  {
-    title: "Inflation Calculator",
-    description: "Estimate the future value of money.",
-    href: "/inflation-calculator",
-    category: "Finance",
-  },
-  {
-    title: "VAT Calculator",
-    description: "Calculate VAT and total price.",
-    href: "/vat-calculator",
-    category: "Finance",
-  },
-  {
-    title: "BMI Calculator",
-    description: "Calculate your BMI.",
-    href: "/bmi-calculator",
-    category: "Health",
-  },
-  {
-    title: "Calorie Calculator",
-    description: "Estimate daily calorie needs.",
-    href: "/calorie-calculator",
-    category: "Health",
-  },
-  {
-    title: "Age Calculator",
-    description: "Calculate your age.",
-    href: "/age-calculator",
-    category: "Health",
-  },
-  {
-    title: "Recipe Servings Calculator",
-    description: "Scale recipe ingredients.",
-    href: "/recipe-servings-calculator",
-    category: "Food",
-  },
-  {
-    title: "Percentage Calculator",
-    description: "Calculate percentages.",
-    href: "/percentage-calculator",
-    category: "Math",
-  },
-  {
-    title: "Discount Calculator",
-    description: "Calculate discounts.",
-    href: "/discount-calculator",
-    category: "Math",
-  },
-];
-
-const validCategories = ["Finance", "Health", "Food", "Math"];
+const validCategories = ["Finance", "Health", "Food", "Math"] as const;
+type ValidCategory = (typeof validCategories)[number];
 
 export default function CategoryPage({
   params,
@@ -80,12 +13,12 @@ export default function CategoryPage({
   const categoryName =
     params.category.charAt(0).toUpperCase() + params.category.slice(1);
 
-  if (!validCategories.includes(categoryName)) {
+  if (!validCategories.includes(categoryName as ValidCategory)) {
     notFound();
   }
 
-  const filtered = calculators.filter(
-    (calc) => calc.category === categoryName
+  const filtered: CalculatorItem[] = calculators.filter(
+    (calc: CalculatorItem) => calc.category === categoryName
   );
 
   return (
@@ -94,12 +27,18 @@ export default function CategoryPage({
         {categoryName} Calculators
       </h1>
 
-      <p className="mb-10 text-slate-600">
+      <p className="mb-4 text-slate-600">
         Browse all calculators related to {categoryName.toLowerCase()}.
       </p>
 
+      <p className="mb-10 max-w-3xl text-slate-600">
+        These {categoryName.toLowerCase()} calculators help you solve common
+        everyday problems quickly, whether you want to estimate payments,
+        compare values, plan meals, or check health-related metrics.
+      </p>
+
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((calc) => (
+        {filtered.map((calc: CalculatorItem) => (
           <CalculatorCard
             key={calc.href}
             title={calc.title}
